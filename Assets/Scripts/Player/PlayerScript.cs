@@ -20,7 +20,7 @@ public class PlayerScript : MonoBehaviour
     [SerializeField] public float rayLength;
 
     public Transform attackPoint;
-    public float attackRange = 0.1f;
+    public float attackRange = 0.5f;
     public LayerMask enemyLayer;
     public Animator animator;
 
@@ -112,7 +112,12 @@ public class PlayerScript : MonoBehaviour
             Collider2D[] enemiesHit = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, enemyLayer);
             foreach (Collider2D enemy in enemiesHit)
             {
+                IDamageable target = enemy.GetComponentInParent<IDamageable>();
+                if (target == null) continue;
                 Debug.Log("bro got hit lmao");
+
+                Vector2 dir = faceRight ? Vector2.right : Vector2.left;
+                target.TakeDamage(new DamageInfo(10f, enemy.ClosestPoint(attackPoint.position), dir, gameObject, 1f));
             }
         }
     }
