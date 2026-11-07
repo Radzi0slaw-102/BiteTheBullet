@@ -135,6 +135,7 @@ GameObject:
   - component: {fileID: 38152561}
   - component: {fileID: 38152562}
   - component: {fileID: 38152563}
+  - component: {fileID: 38152564}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -383,8 +384,33 @@ MonoBehaviour:
   hitboxSize: {x: 0.6, y: 0.9}
   hitboxOffset: {x: 0, y: 0.45}
   groundCheckLength: 0.3
+  animator: {fileID: 38152562}
+  dashingAnimatorBool: isDashing
   dashActionName: Dash
   moveActionName: Move
+--- !u!114 &38152564
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 38152555}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d9d5cdd25a2811043807ab5906009872, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DashAfterimages
+  source: {fileID: 38152559}
+  count: 2
+  spacing: 0.3
+  firstAlpha: 0.35
+  alphaFalloff: 0.45
+  afterimageMaterial: {fileID: 2100000, guid: 2524eae6f22742249f9e419ae6052a8a, type: 2}
+  colors:
+  - {r: 0.35, g: 0.95, b: 1, a: 1}
+  - {r: 0.75, g: 0.4, b: 1, a: 1}
+  colorStrength: 0.75
+  fadeOutDuration: 0.12
 --- !u!1001 &206714531
 PrefabInstance:
   m_ObjectHideFlags: 0

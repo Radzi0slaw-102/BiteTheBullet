@@ -57,6 +57,13 @@ public class PlayerDash : MonoBehaviour
     [Header("Ground check (dla Allow Air Dash)")]
     [SerializeField, Min(0.01f)] private float groundCheckLength = 0.3f;
 
+    [Header("Animation")]
+    [Tooltip("Animator gracza. Puste = Animator z tego obiektu (jeśli jest).")]
+    [SerializeField] private Animator animator;
+
+    [Tooltip("Parametr bool Animatora ustawiany na czas dasha. Jeśli Animator go nie ma – pomijany.")]
+    [SerializeField] private string dashingAnimatorBool = "isDashing";
+
     [Header("Input")]
     [SerializeField] private string dashActionName = "Dash";
     [SerializeField] private string moveActionName = "Move";
@@ -89,6 +96,8 @@ public class PlayerDash : MonoBehaviour
     private readonly List<Collider2D> overlapResults = new();
     private readonly List<RaycastHit2D> castResults = new();
 
+    private bool animatorHasDashBool;
+
     private float DashSpeed => dashDistance / dashDuration;
 
     // Reset wywołuje edytor przy dodaniu komponentu – ustawiamy sensowną domyślną warstwę celów.
@@ -100,6 +109,14 @@ public class PlayerDash : MonoBehaviour
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+        if (animator == null)
+            animator = GetComponent<Animator>();
+
+        // Sprawdzamy raz, czy Animator ma parametr – inaczej SetBool co dash wypisywałby ostrzeżenie.
+        if (animator != null && animator.runtimeAnimatorController != null)
+            foreach (AnimatorControllerParameter parameter in animator.parameters)
+                if (parameter.type == AnimatorControllerParameterType.Bool && parameter.name == dashingAnimatorBool)
+                    animatorHasDashBool = true;
     }
 
     private void Start()
@@ -197,6 +214,9 @@ public class PlayerDash : MonoBehaviour
             lastHitCheckPosition = HitboxCenter();
         }
 
+        if (animatorHasDashBool)
+            animator.SetBool(dashingAnimatorBool, true);
+
         DashStarted?.Invoke();
     }
 
@@ -212,6 +232,9 @@ public class PlayerDash : MonoBehaviour
 
         // Wyhamuj – dalej ruchem steruje już PlayerScript.
         rb.linearVelocity = Vector2.zero;
+
+        if (animatorHasDashBool)
+            animator.SetBool(dashingAnimatorBool, false);
 
         DashEnded?.Invoke();
     }
