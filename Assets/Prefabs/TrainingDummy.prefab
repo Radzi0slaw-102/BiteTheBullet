@@ -2726,7 +2726,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7469baa31e8e4a6da2d5ddd0d0a93594, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TrainingDummy
-  body: {fileID: 0}
+  body: {fileID: 2709001760348602506}
   bodyRenderer: {fileID: 433073080660825785}
   bodyFlash: {fileID: 773546298175473906}
   bodyCollider: {fileID: 8761979997910038795}
