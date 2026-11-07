@@ -23,6 +23,8 @@ public class PlayerScript : MonoBehaviour
     public float attackRange = 0.5f;
     public LayerMask enemyLayer;
     public Animator animator;
+
+    private PlayerDash dash; // opcjonalny – jeśli gracz ma komponent PlayerDash
     
     private float moveDirection = 0;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -32,7 +34,7 @@ public class PlayerScript : MonoBehaviour
         jumpAction = InputSystem.actions.FindAction("Jump");
         lightAttackAction = InputSystem.actions.FindAction("Light Attack");
         heavyAttackAction = InputSystem.actions.FindAction("Heavy Attack");
-
+        dash = GetComponent<PlayerDash>();
     }
 
     // Update is called once per frame
@@ -68,6 +70,13 @@ public class PlayerScript : MonoBehaviour
     }
     private void Move()
     {
+        // W trakcie dasha prędkością steruje PlayerDash – tylko obracamy postać w stronę dasha.
+        if (dash != null && dash.IsDashing)
+        {
+            Flip(dash.Direction.x);
+            return;
+        }
+
         moveDirection = moveAction.ReadValue<Vector2>().x * groundSpeed * Time.deltaTime;
         rb.linearVelocityX = moveDirection;
         Flip(moveDirection);
@@ -75,6 +84,9 @@ public class PlayerScript : MonoBehaviour
     }
     private void Jump()
     {
+        if (dash != null && dash.IsDashing)
+            return;
+
         if (canJump && jumpAction.IsPressed())
         {
             // Debug.Log("Jump");

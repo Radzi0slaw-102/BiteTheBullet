@@ -134,6 +134,7 @@ GameObject:
   - component: {fileID: 38152556}
   - component: {fileID: 38152561}
   - component: {fileID: 38152562}
+  - component: {fileID: 38152563}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -355,6 +356,35 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &38152563
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 38152555}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ecf4a1e9de14bb2e9002fbd4504d631, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerDash
+  dashDistance: 1.5
+  dashDuration: 0.15
+  dashCooldown: 0.5
+  allowAirDash: 1
+  suspendGravity: 1
+  useMoveInputDirection: 1
+  passThroughTargets: 1
+  damage: 10
+  knockbackForce: 5
+  targetLayers:
+    serializedVersion: 2
+    m_Bits: 64
+  hitboxSize: {x: 0.6, y: 0.9}
+  hitboxOffset: {x: 0, y: 0.45}
+  groundCheckLength: 0.3
+  dashActionName: Dash
+  moveActionName: Move
 --- !u!1001 &206714531
 PrefabInstance:
   m_ObjectHideFlags: 0
