@@ -67,6 +67,7 @@ public class PlayerScript : MonoBehaviour
             Debug.DrawRay(origin, Vector2.down*length, Color.red);
             canJump = false;
         }
+        
     }
     private void Move()
     {
