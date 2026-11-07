@@ -79,6 +79,9 @@ public class TrainingDummy : MonoBehaviour, IDamageable
     [Tooltip("Jak długo (s) od powalenia dummy leży, zanim zacznie wstawać.")]
     [SerializeField, Min(0.1f)] private float knockDownDuration = 1.5f;
 
+    [Header("Particles")]
+    [SerializeField] private ParticleSystem bloodParticles;
+
     [Header("Debug")]
     [SerializeField] private float debugDamage = 10f;
     [SerializeField] private float debugLightForce = 1f;
@@ -144,6 +147,11 @@ public class TrainingDummy : MonoBehaviour, IDamageable
         // Bujanie tylko, gdy dummy stoi. Leżący / wstający / lecący tylko błyska.
         if (pose == Pose.Idle || pose == Pose.Hit)
             PlayHit(fromLeft);
+
+        //Emitowanie particli krwi w zależności od kierunku uderzenia
+        
+        bloodParticles.transform.localScale = new Vector3(pushSign,1, 1);
+        bloodParticles.Emit(25);
     }
 
     // ---- Reakcje na zdarzenia -------------------------------------------------------------
