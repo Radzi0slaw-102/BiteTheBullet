@@ -15,6 +15,11 @@ public readonly struct DamageInfo
     /// </summary>
     public readonly float Force;
 
+    /// <summary>
+    /// Siła uderzenia (w górę, lub w dół.) Do podbijania przeciwników.
+    /// </summary>
+    public readonly float UpForce;
+
     /// <summary>Punkt trafienia w przestrzeni świata.</summary>
     public readonly Vector2 Point;
 
@@ -24,10 +29,11 @@ public readonly struct DamageInfo
     /// <summary>Obiekt, który zadał obrażenia (broń, pocisk...). Może być null.</summary>
     public readonly GameObject Source;
 
-    public DamageInfo(float amount, Vector2 point, Vector2 direction, GameObject source = null, float force = 0f)
+    public DamageInfo(float amount, Vector2 point, Vector2 direction, GameObject source = null, float force = 0f, float upForce = 0f)
     {
         Amount = amount;
         Force = Mathf.Max(0f, force);
+        UpForce = upForce;
         Point = point;
         Direction = direction.sqrMagnitude > 0f ? direction.normalized : Vector2.zero;
         Source = source;

@@ -1,5 +1,7 @@
 using System.Collections;
+using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 /// <summary>
 /// Kukła treningowa. Sama w sobie jest bardzo "głupia":
@@ -135,14 +137,14 @@ public class TrainingDummy : MonoBehaviour, IDamageable
         if (info.Force >= knockDownThreshold)
         {
             // Mocny cios: odsuń dalej i przewróć w stronę, w którą pcha cios.
-            Push(pushSign, knockDownPushSpeed);
+            Push(pushSign, knockDownPushSpeed, info.UpForce);
             fallSign = pushSign;
             bodyState.KnockDown(knockDownDuration); // -> KnockDownStarted -> animacja upadku
             return;
         }
 
         if (info.Force >= pushThreshold)
-            Push(pushSign, pushSpeed);    // średni cios: tylko przesunięcie
+            Push(pushSign, pushSpeed, info.UpForce);    // średni cios: tylko przesunięcie
 
         // Bujanie tylko, gdy dummy stoi. Leżący / wstający / lecący tylko błyska.
         if (pose == Pose.Idle || pose == Pose.Hit)
@@ -184,14 +186,14 @@ public class TrainingDummy : MonoBehaviour, IDamageable
             PlayIdle();
     }
 
-    private void Push(int sign, float speed)
+    private void Push(int sign, float speedX, float speedY)
     {
         // Impuls = masa * zmiana prędkości, więc mnożymy przez masę: efekt nie zależy od ustawionej masy.
-        rb.AddForce(new Vector2(sign * speed * rb.mass, 0f), ForceMode2D.Impulse);
+        rb.AddForce(new Vector2(sign * speedX * rb.mass, speedY * rb.mass), ForceMode2D.Impulse);
     }
 
     private bool HitCameFromLeft(DamageInfo info)
-    {
+    {   
         // 1) Kierunek ciosu ma wyraźną składową poziomą -> on decyduje (cios w prawo = przyszedł z lewej).
         if (Mathf.Abs(info.Direction.x) > 0.2f)
             return info.Direction.x > 0f;
@@ -201,7 +203,7 @@ public class TrainingDummy : MonoBehaviour, IDamageable
             return info.Point.x < transform.position.x;
 
         // 3) Idealnie w środek – losujemy.
-        return Random.value < 0.5f;
+        return UnityEngine.Random.value < 0.5f;
     }
 
     // ---- Pozy i animacje ------------------------------------------------------------------

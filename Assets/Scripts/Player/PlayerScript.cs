@@ -123,7 +123,7 @@ public class PlayerScript : MonoBehaviour
     }
     
     
-    private void Hit(float damage, float force)
+    private void Hit(float damage, float force, float upForce)
     {
         Vector2 dir = faceRight ? Vector2.right : Vector2.left;
 
@@ -131,16 +131,16 @@ public class PlayerScript : MonoBehaviour
         {
             IDamageable target = enemy.GetComponentInParent<IDamageable>();
             if (target == null) continue;
-            target.TakeDamage(new DamageInfo(damage, enemy.ClosestPoint(attackPoint.position), dir, gameObject, force));
+            target.TakeDamage(new DamageInfo(damage, enemy.ClosestPoint(attackPoint.position), dir, gameObject, force, upForce));
             if (damage <= 20) Debug.Log("bro got hit lmao");
             if (damage >= 50) Debug.Log("bro got destroyed gg");
             StartCoroutine(FreezeTime(0.07f, 0.1f));
         }
     }   
     
-    public void LightAttackHit() => Hit(10f, 1f);
+    public void LightAttackHit() => Hit(10f, 4f, 1f);
     
-    public void HeavyAttackHit() => Hit(60f, 3f);
+    public void HeavyAttackHit() => Hit(60f, 9f, -1.5f);
 
     // to visualize the radius of an attack
     private void OnDrawGizmosSelected()
