@@ -18,6 +18,8 @@ public class PlayerScript : MonoBehaviour
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private float jumpForce;
     [SerializeField] public float rayLength;
+    [SerializeField] private ParticleSystem jumpSmoke;
+
 
     public Transform attackPoint;
     public float attackRange = 0.5f;
@@ -94,6 +96,7 @@ public class PlayerScript : MonoBehaviour
         {
             // Debug.Log("Jump");
             rb.AddForceY(jumpForce, ForceMode2D.Impulse);
+            jumpSmoke.Emit(1);
         }
     }
     private void Flip(float direction)
