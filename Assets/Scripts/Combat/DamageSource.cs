@@ -17,6 +17,9 @@ public class DamageSource : MonoBehaviour
 {
     [SerializeField, Min(0f)] private float damage = 10f;
 
+    [Tooltip("Siła uderzenia przekazywana celowi (DamageInfo.Force). 0 = bez odrzutu.")]
+    [SerializeField, Min(0f)] private float knockbackForce = 0f;
+
     [Tooltip("Minimalny odstęp (s) między kolejnymi trafieniami TEGO SAMEGO celu. Chroni przed wielokrotnym trafieniem jednym ciosem.")]
     [SerializeField, Min(0f)] private float rehitCooldown = 0.25f;
 
@@ -25,6 +28,12 @@ public class DamageSource : MonoBehaviour
 
     [Tooltip("Zniszcz ten obiekt po pierwszym trafieniu (np. pocisk).")]
     [SerializeField] private bool destroyOnHit = false;
+
+    public float KnockbackForce
+    {
+        get => knockbackForce;
+        set => knockbackForce = Mathf.Max(0f, value);
+    }
 
     private readonly Dictionary<IDamageable, float> lastHitTime = new();
     private Rigidbody2D body;
@@ -62,7 +71,7 @@ public class DamageSource : MonoBehaviour
             return;
         lastHitTime[target] = Time.time;
 
-        target.TakeDamage(new DamageInfo(damage, hitPoint, GetHitDirection(other), gameObject));
+        target.TakeDamage(new DamageInfo(damage, hitPoint, GetHitDirection(other), gameObject, knockbackForce));
 
         if (destroyOnHit)
             Destroy(gameObject);

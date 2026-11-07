@@ -171,6 +171,6 @@ MonoBehaviour:
   m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::DamageSource
   damage: 10
-  rehitCooldown: 0.3
+  rehitCooldown: 5
   minImpactSpeed: 0.5
   destroyOnHit: 0
