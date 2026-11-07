@@ -6,29 +6,58 @@ using UnityEngine;
 ///  - przyjmuje obrażenia przez IDamageable (nie obchodzi jej, czym ją trafiono),
 ///  - przekazuje je do komponentu Health (który ma włączone odnawianie HP po wyzerowaniu),
 ///  - reaguje na siłę ciosu: słaby – stoi, średni – przesuwa się, mocny – odlatuje dalej i się przewraca,
-///  - odgrywa reakcję: zmienia sprite / obraca ciało i błyska (SpriteFlash).
+///  - odgrywa animacje z klatek (idle, bujanie po ciosie, upadek, wstawanie, poza w powietrzu) i błyska.
+///
+/// Klatki są narysowane dla jednego kierunku (cios z lewej, upadek w prawo).
+/// Drugi kierunek to lustrzane odbicie sprite'a (SpriteRenderer.flipX).
 ///
 /// Budowa obiektu:
 ///   TrainingDummy  (ten skrypt, Health, Rigidbody2D, BodyStateTracker)
-///   ├─ Body        (SpriteRenderer, CapsuleCollider2D, SpriteFlash) – tylko to się obraca przy powaleniu
-///   └─ HealthBar   – zostaje prosto, bo nie jest dzieckiem Body
+///   ├─ Body        (SpriteRenderer, CapsuleCollider2D, SpriteFlash)
+///   └─ HealthBar
 /// </summary>
 [RequireComponent(typeof(Health), typeof(Rigidbody2D), typeof(BodyStateTracker))]
 public class TrainingDummy : MonoBehaviour, IDamageable
 {
+    private enum Pose { Idle, Hit, Airborne, Falling, GettingUp }
+
     [Header("Body")]
-    [Tooltip("Dziecko z grafiką i colliderem – obracane przy powaleniu.")]
+    [Tooltip("Dziecko z grafiką i colliderem.")]
     [SerializeField] private Transform body;
     [SerializeField] private SpriteRenderer bodyRenderer;
     [SerializeField] private SpriteFlash bodyFlash;
+    [SerializeField] private CapsuleCollider2D bodyCollider;
 
-    [Header("Sprites")]
-    [SerializeField] private Sprite idleSprite;
-    [Tooltip("Poza po ciosie z lewej strony (kukła odchyla się w prawo).")]
-    [SerializeField] private Sprite hitFromLeftSprite;
-    [Tooltip("Poza po ciosie z prawej strony (kukła odchyla się w lewo).")]
-    [SerializeField] private Sprite hitFromRightSprite;
-    [SerializeField, Min(0.01f)] private float hitPoseDuration = 0.25f;
+    [Header("Animation – idle")]
+    [Tooltip("Klatki pozy stojącej, odtwarzane w pętli.")]
+    [SerializeField] private Sprite[] idleFrames;
+    [SerializeField, Min(0.1f)] private float idleFps = 2f;
+
+    [Header("Animation – hit")]
+    [Tooltip("Bujanie po ciosie, narysowane dla ciosu z LEWEJ (cios z prawej = odbicie lustrzane).")]
+    [SerializeField] private Sprite[] hitFrames;
+    [SerializeField, Min(1f)] private float hitFps = 14f;
+
+    [Header("Animation – knock down")]
+    [Tooltip("Upadek, narysowany jako przewracanie się w PRAWO (w lewo = odbicie lustrzane). Ostatnia klatka = leżenie.")]
+    [SerializeField] private Sprite[] fallFrames;
+    [SerializeField, Min(1f)] private float fallFps = 12f;
+    [Tooltip("Wstawanie = klatki upadku od tyłu.")]
+    [SerializeField, Min(1f)] private float getUpFps = 10f;
+
+    [Header("Animation – airborne")]
+    [SerializeField] private Sprite airborneSprite;
+    [Tooltip("O ile unieść grafikę (i collider), gdy dummy jest w powietrzu.")]
+    [SerializeField] private float airborneLift = 0.06f;
+
+    [Header("Collider")]
+    [SerializeField] private Vector2 standingColliderSize = new(0.4f, 0.85f);
+    [SerializeField] private Vector2 standingColliderOffset = new(0f, 0.425f);
+    [Tooltip("Kształt leżącego dummy'ego. Offset X jest dla upadku w prawo – przy upadku w lewo jest odwracany.")]
+    [SerializeField] private Vector2 lyingColliderSize = new(0.95f, 0.3f);
+    [SerializeField] private Vector2 lyingColliderOffset = new(0.03f, 0.15f);
+    [Tooltip("Od której klatki upadku (licząc od 0) collider jest już \"leżący\".")]
+    [SerializeField, Min(0)] private int lyingColliderFromFrame = 3;
 
     [Header("Flash")]
     [Tooltip("Kolor błysku po trafieniu: biały = rozjaśnienie, czerwony = zaczerwienienie.")]
@@ -47,13 +76,8 @@ public class TrainingDummy : MonoBehaviour, IDamageable
     [SerializeField, Min(0f)] private float knockDownPushSpeed = 2f;
 
     [Header("Knock down")]
+    [Tooltip("Jak długo (s) od powalenia dummy leży, zanim zacznie wstawać.")]
     [SerializeField, Min(0.1f)] private float knockDownDuration = 1.5f;
-    [Tooltip("Faza 1: jak długo dummy stoi przechylony w stronę upadku.")]
-    [SerializeField, Min(0.01f)] private float fallTiltDuration = 0.12f;
-    [Tooltip("Faza 2: jak długo leży z przechyleniem w drugą stronę (\"próbuje wstać\").")]
-    [SerializeField, Min(0.01f)] private float reboundDuration = 0.15f;
-    [Tooltip("O ile podnieść leżące ciało, żeby nie wchodziło w podłogę (ok. połowa grubości sprite'a).")]
-    [SerializeField] private float lyingHeightOffset = 0.1f;
 
     [Header("Debug")]
     [SerializeField] private float debugDamage = 10f;
@@ -66,6 +90,7 @@ public class TrainingDummy : MonoBehaviour, IDamageable
     private Rigidbody2D rb;
     private BodyStateTracker bodyState;
     private Coroutine poseRoutine;
+    private Pose pose;
     private bool depletedThisHit;
     private int fallSign = 1; // +1 = upadek w prawo, -1 = w lewo
 
@@ -74,21 +99,23 @@ public class TrainingDummy : MonoBehaviour, IDamageable
         health = GetComponent<Health>();
         rb = GetComponent<Rigidbody2D>();
         bodyState = GetComponent<BodyStateTracker>();
-
-        if (idleSprite == null)
-            idleSprite = bodyRenderer.sprite;
     }
 
     private void OnEnable()
     {
         health.Depleted += OnDepleted;
         bodyState.StateChanged += OnBodyStateChanged;
+        bodyState.KnockDownStarted += OnKnockDownStarted;
+        bodyState.KnockDownTimeElapsed += OnKnockDownTimeElapsed;
+        PlayIdle();
     }
 
     private void OnDisable()
     {
         health.Depleted -= OnDepleted;
         bodyState.StateChanged -= OnBodyStateChanged;
+        bodyState.KnockDownStarted -= OnKnockDownStarted;
+        bodyState.KnockDownTimeElapsed -= OnKnockDownTimeElapsed;
     }
 
     // ---- IDamageable ----------------------------------------------------------------------
@@ -107,32 +134,46 @@ public class TrainingDummy : MonoBehaviour, IDamageable
             // Mocny cios: odsuń dalej i przewróć w stronę, w którą pcha cios.
             Push(pushSign, knockDownPushSpeed);
             fallSign = pushSign;
-            bodyState.KnockDown(knockDownDuration); // -> StateChanged -> animacja upadku
+            bodyState.KnockDown(knockDownDuration); // -> KnockDownStarted -> animacja upadku
             return;
         }
 
         if (info.Force >= pushThreshold)
             Push(pushSign, pushSpeed);    // średni cios: tylko przesunięcie
 
-        // Leżący dummy nie przyjmuje "stojącej" pozy po ciosie – tylko błyska.
-        if (!bodyState.IsKnockedDown)
-            PlayHitPose(fromLeft);
+        // Bujanie tylko, gdy dummy stoi. Leżący / wstający / lecący tylko błyska.
+        if (pose == Pose.Idle || pose == Pose.Hit)
+            PlayHit(fromLeft);
     }
 
-    // ---- Reakcja --------------------------------------------------------------------------
+    // ---- Reakcje na zdarzenia -------------------------------------------------------------
 
     private void OnDepleted()
     {
         depletedThisHit = true;
-        // Tu można dodać np. dźwięk/efekt "rozbicia" – Health sam odnowi HP do maksimum.
+    }
+
+    private void OnKnockDownStarted()
+    {
+        // Wywoływane przy każdym powaleniu. Jeśli dummy już leży (lub właśnie upada) – zostaje,
+        // jeśli w trakcie wstawania – przewraca się ponownie.
+        if (pose != Pose.Falling)
+            StartPose(Pose.Falling, FallRoutine(fallSign));
+    }
+
+    private void OnKnockDownTimeElapsed()
+    {
+        // Czas leżenia minął – wstajemy animacją. Stan nadal jest KnockedDown aż do jej końca.
+        StartPose(Pose.GettingUp, GetUpRoutine());
     }
 
     private void OnBodyStateChanged(BodyState oldState, BodyState newState)
     {
-        if (newState == BodyState.KnockedDown)
-            StartPose(KnockDownRoutine(fallSign));
-        else if (oldState == BodyState.KnockedDown)
-            ResetPose(); // wstał
+        // Powaleniem i wstawaniem zajmują się zdarzenia KnockDown*; tu tylko wybicie w górę i lądowanie.
+        if (newState == BodyState.Airborne)
+            ShowAirborne();
+        else if (newState == BodyState.Standing && pose == Pose.Airborne)
+            PlayIdle();
     }
 
     private void Push(int sign, float speed)
@@ -147,7 +188,7 @@ public class TrainingDummy : MonoBehaviour, IDamageable
         if (Mathf.Abs(info.Direction.x) > 0.2f)
             return info.Direction.x > 0f;
 
-        // 2) Cios prawie pionowy (np. piłka spadająca z góry) -> patrzymy, po której stronie środka trafił.
+        // 2) Cios prawie pionowy -> patrzymy, po której stronie środka trafił.
         if (!Mathf.Approximately(info.Point.x, transform.position.x))
             return info.Point.x < transform.position.x;
 
@@ -155,64 +196,109 @@ public class TrainingDummy : MonoBehaviour, IDamageable
         return Random.value < 0.5f;
     }
 
-    // ---- Pozy (sprite + obrót ciała) ------------------------------------------------------
+    // ---- Pozy i animacje ------------------------------------------------------------------
 
-    private void PlayHitPose(bool fromLeft)
+    private void PlayIdle() => StartPose(Pose.Idle, IdleRoutine());
+
+    private void PlayHit(bool fromLeft) => StartPose(Pose.Hit, HitRoutine(fromLeft));
+
+    private void ShowAirborne()
     {
-        StartPose(HitPoseRoutine(fromLeft ? hitFromLeftSprite : hitFromRightSprite));
+        StopPose();
+        pose = Pose.Airborne;
+        ShowFrame(airborneSprite, airborneLift, lying: false);
     }
 
-    private IEnumerator HitPoseRoutine(Sprite hitSprite)
+    private IEnumerator IdleRoutine()
     {
-        SetPose(hitSprite, 0f, 0f);
-        yield return new WaitForSeconds(hitPoseDuration);
-        SetPose(idleSprite, 0f, 0f);
+        // Pętla: 0_4, 0_5, 0_4, ... Kierunek (flipX) zostaje taki, jaki był – dummy się nie "przekręca".
+        if (idleFrames == null || idleFrames.Length == 0)
+            yield break;
+        for (int i = 0; ; i = (i + 1) % idleFrames.Length)
+        {
+            ShowFrame(idleFrames[i], 0f, lying: false);
+            yield return new WaitForSeconds(1f / idleFps);
+        }
+    }
+
+    private IEnumerator HitRoutine(bool fromLeft)
+    {
+        bodyRenderer.flipX = !fromLeft; // klatki są dla ciosu z lewej
+        for (int i = 0; i < hitFrames.Length; i++)
+        {
+            ShowFrame(hitFrames[i], 0f, lying: false);
+            yield return new WaitForSeconds(1f / hitFps);
+        }
+
+        poseRoutine = null;
+        // W trakcie bujania dummy mógł zostać podrzucony.
+        if (bodyState.CurrentBodyState == BodyState.Airborne)
+            ShowAirborne();
+        else
+            PlayIdle();
+    }
+
+    private IEnumerator FallRoutine(int sign)
+    {
+        bodyRenderer.flipX = sign < 0; // klatki są dla upadku w prawo
+        for (int i = 0; i < fallFrames.Length; i++)
+        {
+            ShowFrame(fallFrames[i], 0f, lying: i >= lyingColliderFromFrame);
+            yield return new WaitForSeconds(1f / fallFps);
+        }
+        // Ostatnia klatka (leżenie) zostaje na ekranie, aż BodyStateTracker ogłosi koniec czasu.
         poseRoutine = null;
     }
 
-    private IEnumerator KnockDownRoutine(int sign)
+    private IEnumerator GetUpRoutine()
     {
-        // Upadek w prawo = obrót zgodnie z ruchem wskazówek zegara, czyli ujemny kąt w osi Z.
-        float lyingAngle = -90f * sign;
-        Sprite tiltTowardFall = sign > 0 ? hitFromLeftSprite : hitFromRightSprite;   // odchylony w stronę upadku
-        Sprite tiltAwayFromFall = sign > 0 ? hitFromRightSprite : hitFromLeftSprite; // odchylony w drugą stronę
+        // Klatki upadku od tyłu: z leżenia do pionu.
+        for (int i = fallFrames.Length - 1; i >= 0; i--)
+        {
+            ShowFrame(fallFrames[i], 0f, lying: i >= lyingColliderFromFrame);
+            yield return new WaitForSeconds(1f / getUpFps);
+        }
 
-        // Faza 1: jeszcze stoi, ale przechyla się w stronę upadku.
-        SetPose(tiltTowardFall, 0f, 0f);
-        yield return new WaitForSeconds(fallTiltDuration);
-
-        // Faza 2: leży (90°), a przechylenie w drugą stronę wygląda jak próba wstania – "góra" ciała unosi się.
-        SetPose(tiltAwayFromFall, lyingAngle, lyingHeightOffset);
-        yield return new WaitForSeconds(reboundDuration);
-
-        // Faza 3: opada płasko i leży, aż BodyStateTracker zakończy powalenie.
-        SetPose(idleSprite, lyingAngle, lyingHeightOffset);
         poseRoutine = null;
+        PlayIdle();
+        bodyState.GetUp();  // dopiero teraz stan przestaje być KnockedDown (stojący albo w powietrzu)
     }
 
-    private void ResetPose()
+    private void StartPose(Pose newPose, IEnumerator routine)
     {
-        if (poseRoutine != null)
-            StopCoroutine(poseRoutine);
-        poseRoutine = null;
-        SetPose(idleSprite, 0f, 0f);
-    }
-
-    private void StartPose(IEnumerator routine)
-    {
-        // Nowa poza zawsze przerywa poprzednią (np. powalenie w trakcie pozy po ciosie).
-        if (poseRoutine != null)
-            StopCoroutine(poseRoutine);
+        // Nowa poza zawsze przerywa poprzednią (np. powalenie w trakcie bujania).
+        StopPose();
+        pose = newPose;
         poseRoutine = StartCoroutine(routine);
     }
 
-    private void SetPose(Sprite sprite, float angle, float height)
+    private void StopPose()
+    {
+        if (poseRoutine != null)
+            StopCoroutine(poseRoutine);
+        poseRoutine = null;
+    }
+
+    private void ShowFrame(Sprite sprite, float lift, bool lying)
     {
         if (sprite != null)
             bodyRenderer.sprite = sprite;
-        // Pivot sprite'a jest przy stopach, więc obrót kładzie ciało "na bok" wokół podstawy.
-        body.localRotation = Quaternion.Euler(0f, 0f, angle);
-        body.localPosition = new Vector3(0f, height, 0f);
+        body.localPosition = new Vector3(0f, lift, 0f);
+
+        // Collider dopasowany do kształtu na klatce. Offset X odwracamy razem z grafiką.
+        float side = bodyRenderer.flipX ? -1f : 1f;
+        if (lying)
+        {
+            bodyCollider.direction = CapsuleDirection2D.Horizontal;
+            bodyCollider.size = lyingColliderSize;
+            bodyCollider.offset = new Vector2(lyingColliderOffset.x * side, lyingColliderOffset.y);
+        }
+        else
+        {
+            bodyCollider.direction = CapsuleDirection2D.Vertical;
+            bodyCollider.size = standingColliderSize;
+            bodyCollider.offset = new Vector2(standingColliderOffset.x * side, standingColliderOffset.y);
+        }
     }
 
     // ---- Narzędzia do testów (prawy klik na komponencie w Inspectorze, w trybie Play) ------
@@ -231,7 +317,11 @@ public class TrainingDummy : MonoBehaviour, IDamageable
     private void DebugKnockDown() => bodyState.KnockDown(knockDownDuration);
 
     [ContextMenu("Debug/Get Up")]
-    private void DebugGetUp() => bodyState.GetUp();
+    private void DebugGetUp()
+    {
+        if (bodyState.IsKnockedDown && pose != Pose.GettingUp)
+            StartPose(Pose.GettingUp, GetUpRoutine());
+    }
 
     private void DebugHit(float force, bool fromLeft) =>
         TakeDamage(new DamageInfo(debugDamage, transform.position, fromLeft ? Vector2.right : Vector2.left, null, force));

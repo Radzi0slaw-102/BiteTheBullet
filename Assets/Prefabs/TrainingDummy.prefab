@@ -118,8 +118,8 @@ Transform:
   m_GameObject: {fileID: 2829716107554230334}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.5, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: 1, z: 0}
+  m_LocalScale: {x: 2, y: 2, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4701621298025455221}
@@ -300,10 +300,34 @@ MonoBehaviour:
   body: {fileID: 2709001760348602506}
   bodyRenderer: {fileID: 433073080660825785}
   bodyFlash: {fileID: 773546298175473906}
-  idleSprite: {fileID: 8038476998806871070, guid: 5c15bf4ebfe24976a1bcbcaab4ab2918, type: 3}
-  hitFromLeftSprite: {fileID: 3337024816323275442, guid: 5c15bf4ebfe24976a1bcbcaab4ab2918, type: 3}
-  hitFromRightSprite: {fileID: 8576669430734707776, guid: 5c15bf4ebfe24976a1bcbcaab4ab2918, type: 3}
-  hitPoseDuration: 0.25
+  bodyCollider: {fileID: 8761979997910038795}
+  idleFrames:
+  - {fileID: 7234325396184815077, guid: 15ac2604b4d2470d9060039a8f5444e1, type: 3}
+  - {fileID: 1762624278964412406, guid: 15ac2604b4d2470d9060039a8f5444e1, type: 3}
+  idleFps: 2
+  hitFrames:
+  - {fileID: 2761750308927882720, guid: 15ac2604b4d2470d9060039a8f5444e1, type: 3}
+  - {fileID: 1047461179311914904, guid: 15ac2604b4d2470d9060039a8f5444e1, type: 3}
+  - {fileID: 8806068455919387329, guid: 15ac2604b4d2470d9060039a8f5444e1, type: 3}
+  - {fileID: 8694052523304890669, guid: 15ac2604b4d2470d9060039a8f5444e1, type: 3}
+  - {fileID: 7234325396184815077, guid: 15ac2604b4d2470d9060039a8f5444e1, type: 3}
+  - {fileID: 1762624278964412406, guid: 15ac2604b4d2470d9060039a8f5444e1, type: 3}
+  hitFps: 14
+  fallFrames:
+  - {fileID: 6809500319193805741, guid: 15ac2604b4d2470d9060039a8f5444e1, type: 3}
+  - {fileID: 7182873145527276676, guid: 15ac2604b4d2470d9060039a8f5444e1, type: 3}
+  - {fileID: 8423430594952321423, guid: 15ac2604b4d2470d9060039a8f5444e1, type: 3}
+  - {fileID: 5480622852024189953, guid: 15ac2604b4d2470d9060039a8f5444e1, type: 3}
+  - {fileID: 6015539321605785165, guid: 15ac2604b4d2470d9060039a8f5444e1, type: 3}
+  fallFps: 12
+  getUpFps: 10
+  airborneSprite: {fileID: 6809500319193805741, guid: 15ac2604b4d2470d9060039a8f5444e1, type: 3}
+  airborneLift: 0.06
+  standingColliderSize: {x: 0.4, y: 0.85}
+  standingColliderOffset: {x: 0, y: 0.425}
+  lyingColliderSize: {x: 0.95, y: 0.3}
+  lyingColliderOffset: {x: 0.03, y: 0.15}
+  lyingColliderFromFrame: 3
   hitFlashColor: {r: 1, g: 1, b: 1, a: 1}
   depletedFlashColor: {r: 1, g: 0.25, b: 0.25, a: 1}
   pushThreshold: 3
@@ -311,9 +335,6 @@ MonoBehaviour:
   pushSpeed: 1.2
   knockDownPushSpeed: 2
   knockDownDuration: 1.5
-  fallTiltDuration: 0.12
-  reboundDuration: 0.15
-  lyingHeightOffset: 0.1
   debugDamage: 10
   debugLightForce: 1
   debugMediumForce: 5
@@ -360,6 +381,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BodyStateTracker
   rayLength: 0.1
   rayOriginOffset: 0.05
+  getUpAutomatically: 0
 --- !u!1 &6123471561968479182
 GameObject:
   m_ObjectHideFlags: 0
@@ -443,12 +465,12 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 8038476998806871070, guid: 5c15bf4ebfe24976a1bcbcaab4ab2918, type: 3}
+  m_Sprite: {fileID: 7234325396184815077, guid: 15ac2604b4d2470d9060039a8f5444e1, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 0.28, y: 0.435}
+  m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -488,8 +510,8 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0.215}
-  m_Size: {x: 0.18, y: 0.43}
+  m_Offset: {x: 0, y: 0.425}
+  m_Size: {x: 0.4, y: 0.85}
   m_Direction: 0
 --- !u!114 &773546298175473906
 MonoBehaviour:
