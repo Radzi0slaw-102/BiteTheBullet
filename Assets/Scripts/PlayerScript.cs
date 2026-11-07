@@ -40,8 +40,6 @@ public class PlayerScript : MonoBehaviour
         Move();
         Jump();
         GroundedCheck(rayLength);
-        LightAttack();
-        HeavyAttack();
     }
 
     private void GroundedCheck(float length)
@@ -59,6 +57,7 @@ public class PlayerScript : MonoBehaviour
             Debug.DrawRay(origin, Vector2.down*length, Color.red);
             canJump = false;
         }
+        
     }
     private void Move()
     {
@@ -88,14 +87,14 @@ public class PlayerScript : MonoBehaviour
     {
         if (lightAttackAction.IsPressed())
         {
-            Debug.Log("Light Attack");
+            //Debug.Log("Light Attack");
         }
     }
     private void HeavyAttack()
     {
         if (heavyAttackAction.IsPressed())
         {
-            Debug.Log("Heavy Attack");
+            //Debug.Log("Heavy Attack");
         }
     }
 }
