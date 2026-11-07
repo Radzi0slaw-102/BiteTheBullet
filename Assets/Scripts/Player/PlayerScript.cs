@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using Unity.VisualScripting;
 using UnityEditor.Rendering;
 using UnityEngine;
@@ -125,6 +126,7 @@ public class PlayerScript : MonoBehaviour
     private void Hit(float damage, float force)
     {
         Vector2 dir = faceRight ? Vector2.right : Vector2.left;
+
         foreach (Collider2D enemy in Physics2D.OverlapCircleAll(attackPoint.position, attackRange, enemyLayer))
         {
             IDamageable target = enemy.GetComponentInParent<IDamageable>();
@@ -132,8 +134,9 @@ public class PlayerScript : MonoBehaviour
             target.TakeDamage(new DamageInfo(damage, enemy.ClosestPoint(attackPoint.position), dir, gameObject, force));
             if (damage <= 20) Debug.Log("bro got hit lmao");
             if (damage >= 50) Debug.Log("bro got destroyed gg");
+            StartCoroutine(FreezeTime(0.07f, 0.1f));
         }
-    }
+    }   
     
     public void LightAttackHit() => Hit(10f, 1f);
     
@@ -148,5 +151,13 @@ public class PlayerScript : MonoBehaviour
         }
         
         Gizmos.DrawWireSphere(attackPoint.position, attackRange);
+    }
+
+    private IEnumerator FreezeTime(float duration, float delay)
+    {
+        yield return new WaitForSecondsRealtime(delay);
+        Time.timeScale = 0.0f;
+        yield return new WaitForSecondsRealtime(duration);
+        Time.timeScale = 1;
     }
 }
