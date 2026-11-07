@@ -76,6 +76,7 @@ public class PlayerDash : MonoBehaviour
     private InputAction moveAction;
 
     private bool dashRequested;
+    private Vector2 requestedDirection = Vector2.right;
     private float dashTimeLeft;
     private float cooldownLeft;
 
@@ -113,8 +114,9 @@ public class PlayerDash : MonoBehaviour
     {
         // Wciśnięcia czytamy co klatkę (Update), bo w FixedUpdate można je przegapić.
         // Sam dash wykonujemy w FixedUpdate, razem z fizyką.
+        // Kierunek zapamiętujemy JUŻ TERAZ: do najbliższego kroku fizyki gracz mógł puścić A/D.
         if (dashAction != null && dashAction.WasPressedThisFrame())
-            dashRequested = true;
+            RequestDash();
     }
 
     private void FixedUpdate()
@@ -156,7 +158,11 @@ public class PlayerDash : MonoBehaviour
     }
 
     /// <summary>Poproś o dash (np. z innego skryptu albo AI). Wykona się w najbliższym kroku fizyki.</summary>
-    public void RequestDash() => dashRequested = true;
+    public void RequestDash()
+    {
+        dashRequested = true;
+        requestedDirection = ChooseDirection();
+    }
 
     private void TryStartDash()
     {
@@ -165,7 +171,7 @@ public class PlayerDash : MonoBehaviour
         if (!allowAirDash && !IsGrounded())
             return;
 
-        Direction = ChooseDirection();
+        Direction = requestedDirection;
         IsDashing = true;
         dashTimeLeft = dashDuration;
 
