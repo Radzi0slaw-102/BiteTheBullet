@@ -50,6 +50,42 @@ TextureImporter:
   - first:
       213: -6310726222154455513
     second: marysia100x64_15
+  - first:
+      213: 1087436726093260771
+    second: marysia100x64_16
+  - first:
+      213: 5929755794324303704
+    second: marysia100x64_17
+  - first:
+      213: 6428528878771892961
+    second: marysia100x64_18
+  - first:
+      213: 7300353635887615358
+    second: marysia100x64_19
+  - first:
+      213: -4165749180792141331
+    second: marysia100x64_20
+  - first:
+      213: 1670594275774894730
+    second: marysia100x64_21
+  - first:
+      213: 6986351689729032068
+    second: marysia100x64_22
+  - first:
+      213: 7012363740251181867
+    second: marysia100x64_23
+  - first:
+      213: 63464595206930700
+    second: marysia100x64_24
+  - first:
+      213: 4973379915772886402
+    second: marysia100x64_25
+  - first:
+      213: 3848005423158531048
+    second: marysia100x64_26
+  - first:
+      213: 227758801400188680
+    second: marysia100x64_27
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -177,7 +213,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 128
+        y: 384
         width: 100
         height: 64
       alignment: 9
@@ -199,7 +235,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 100
-        y: 128
+        y: 384
         width: 100
         height: 64
       alignment: 9
@@ -221,7 +257,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 200
-        y: 128
+        y: 384
         width: 100
         height: 64
       alignment: 9
@@ -243,7 +279,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 300
-        y: 128
+        y: 384
         width: 100
         height: 64
       alignment: 9
@@ -265,7 +301,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 64
+        y: 320
         width: 100
         height: 64
       alignment: 9
@@ -287,7 +323,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 100
-        y: 64
+        y: 320
         width: 100
         height: 64
       alignment: 9
@@ -309,7 +345,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 200
-        y: 64
+        y: 320
         width: 100
         height: 64
       alignment: 9
@@ -331,7 +367,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 300
-        y: 64
+        y: 320
         width: 100
         height: 64
       alignment: 9
@@ -353,7 +389,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 400
-        y: 64
+        y: 320
         width: 100
         height: 64
       alignment: 9
@@ -375,7 +411,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 500
-        y: 64
+        y: 320
         width: 100
         height: 64
       alignment: 9
@@ -397,7 +433,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 0
+        y: 256
         width: 100
         height: 64
       alignment: 9
@@ -418,8 +454,8 @@ TextureImporter:
       name: marysia100x64_11
       rect:
         serializedVersion: 2
-        x: 100
-        y: 0
+        x: 0
+        y: 192
         width: 100
         height: 64
       alignment: 9
@@ -440,8 +476,8 @@ TextureImporter:
       name: marysia100x64_12
       rect:
         serializedVersion: 2
-        x: 200
-        y: 0
+        x: 100
+        y: 192
         width: 100
         height: 64
       alignment: 9
@@ -462,8 +498,8 @@ TextureImporter:
       name: marysia100x64_13
       rect:
         serializedVersion: 2
-        x: 300
-        y: 0
+        x: 200
+        y: 192
         width: 100
         height: 64
       alignment: 9
@@ -484,8 +520,8 @@ TextureImporter:
       name: marysia100x64_14
       rect:
         serializedVersion: 2
-        x: 400
-        y: 0
+        x: 300
+        y: 192
         width: 100
         height: 64
       alignment: 9
@@ -502,11 +538,231 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: marysia100x64_15
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 128
+        width: 100
+        height: 64
+      alignment: 9
+      pivot: {x: 0.5, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 726adb5cfebcb68a0800000000000000
+      internalID: -6310726222154455513
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: marysia100x64_16
+      rect:
+        serializedVersion: 2
+        x: 100
+        y: 128
+        width: 100
+        height: 64
+      alignment: 9
+      pivot: {x: 0.5, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3e7a08ed0f9571f00800000000000000
+      internalID: 1087436726093260771
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: marysia100x64_17
+      rect:
+        serializedVersion: 2
+        x: 200
+        y: 128
+        width: 100
+        height: 64
+      alignment: 9
+      pivot: {x: 0.5, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 85fa38d4a79ba4250800000000000000
+      internalID: 5929755794324303704
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: marysia100x64_18
+      rect:
+        serializedVersion: 2
+        x: 300
+        y: 128
+        width: 100
+        height: 64
+      alignment: 9
+      pivot: {x: 0.5, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1e2f98794f8b63950800000000000000
+      internalID: 6428528878771892961
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: marysia100x64_19
+      rect:
+        serializedVersion: 2
+        x: 400
+        y: 128
+        width: 100
+        height: 64
+      alignment: 9
+      pivot: {x: 0.5, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e7d00d1f3f0105560800000000000000
+      internalID: 7300353635887615358
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: marysia100x64_20
+      rect:
+        serializedVersion: 2
+        x: 500
+        y: 128
+        width: 100
+        height: 64
+      alignment: 9
+      pivot: {x: 0.5, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: de9828fe0394036c0800000000000000
+      internalID: -4165749180792141331
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: marysia100x64_21
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 64
+        width: 100
+        height: 64
+      alignment: 9
+      pivot: {x: 0.5, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a821d5384a42f2710800000000000000
+      internalID: 1670594275774894730
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: marysia100x64_22
+      rect:
+        serializedVersion: 2
+        x: 100
+        y: 64
+        width: 100
+        height: 64
+      alignment: 9
+      pivot: {x: 0.5, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 48fbf36b8d184f060800000000000000
+      internalID: 6986351689729032068
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: marysia100x64_23
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 100
+        height: 64
+      alignment: 9
+      pivot: {x: 0.5, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b23508d2babe05160800000000000000
+      internalID: 7012363740251181867
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: marysia100x64_24
+      rect:
+        serializedVersion: 2
+        x: 100
+        y: 0
+        width: 100
+        height: 64
+      alignment: 9
+      pivot: {x: 0.5, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c018f1d86b871e000800000000000000
+      internalID: 63464595206930700
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 5dd3b2712c0b0ef4b896e33aabeacbef
+    spriteID: 633ee47c4c881d144bcfb1ca7ef47347
     internalID: 0
     vertices: []
     indices: 
@@ -516,7 +772,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries:
       - key: SpriteEditor.SliceSettings
-        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":100.0,"y":64.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.25},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":1,"spriteAlignment":9,"pivotUnitMode":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":100.0,"y":64.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.25},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":9,"pivotUnitMode":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
       marysia100x64_0: 4356383243101186875
       marysia100x64_1: 6351031652697197384
@@ -525,7 +781,17 @@ TextureImporter:
       marysia100x64_12: 4549183071015153714
       marysia100x64_13: 5148336723593502406
       marysia100x64_14: -8555170072093728164
+      marysia100x64_15: -6310726222154455513
+      marysia100x64_16: 1087436726093260771
+      marysia100x64_17: 5929755794324303704
+      marysia100x64_18: 6428528878771892961
+      marysia100x64_19: 7300353635887615358
       marysia100x64_2: 1568806057419769015
+      marysia100x64_20: -4165749180792141331
+      marysia100x64_21: 1670594275774894730
+      marysia100x64_22: 6986351689729032068
+      marysia100x64_23: 7012363740251181867
+      marysia100x64_24: 63464595206930700
       marysia100x64_3: 7007380335218285312
       marysia100x64_4: -6007093934806087014
       marysia100x64_5: 955362527339863273

@@ -49,6 +49,8 @@ public class PlayerScript : MonoBehaviour
         Move();
         Jump();
         GroundedCheck(rayLength);
+        animator.SetBool("isGrounded", canJump);
+        animator.SetFloat("height", rb.linearVelocityY);
 
     }
 
@@ -107,28 +109,32 @@ public class PlayerScript : MonoBehaviour
     private void LightAttack()
     {
         if (lightAttackAction.WasPressedThisFrame())
-        {
-            Debug.Log("Light Attack");
-            animator.SetTrigger("Light_Attack");
-            Collider2D[] enemiesHit = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, enemyLayer);
-            foreach (Collider2D enemy in enemiesHit)
-            {
-                IDamageable target = enemy.GetComponentInParent<IDamageable>();
-                if (target == null) continue;
-                Debug.Log("bro got hit lmao");
-
-                Vector2 dir = faceRight ? Vector2.right : Vector2.left;
-                target.TakeDamage(new DamageInfo(10f, enemy.ClosestPoint(attackPoint.position), dir, gameObject, 1f));
-            }
-        }
+            animator.SetTrigger("lightAttack");
     }
+
     private void HeavyAttack()
     {
         if (heavyAttackAction.WasPressedThisFrame())
+            animator.SetTrigger("heavyAttack");
+    }
+    
+    
+    private void Hit(float damage, float force)
+    {
+        Vector2 dir = faceRight ? Vector2.right : Vector2.left;
+        foreach (Collider2D enemy in Physics2D.OverlapCircleAll(attackPoint.position, attackRange, enemyLayer))
         {
-            Debug.Log("Heavy Attack");
+            IDamageable target = enemy.GetComponentInParent<IDamageable>();
+            if (target == null) continue;
+            target.TakeDamage(new DamageInfo(damage, enemy.ClosestPoint(attackPoint.position), dir, gameObject, force));
+            if (damage <= 20) Debug.Log("bro got hit lmao");
+            if (damage >= 50) Debug.Log("bro got destroyed gg");
         }
     }
+    
+    public void LightAttackHit() => Hit(10f, 1f);
+    
+    public void HeavyAttackHit() => Hit(60f, 3f);
 
     // to visualize the radius of an attack
     private void OnDrawGizmosSelected()
