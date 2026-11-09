@@ -225,6 +225,17 @@
                 },
                 {
                     "name": "",
+                    "id": "06ea171c-9493-4702-8172-28f4e53bdee3",
+                    "path": "<Gamepad>/buttonWest",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Light Attack",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "52ceedc0-c2b5-4fa6-bd48-922f709af2ef",
                     "path": "<Mouse>/rightButton",
                     "interactions": "",
@@ -247,8 +258,30 @@
                 },
                 {
                     "name": "",
+                    "id": "fedac945-5ab3-4d55-992e-99f6e65bd12f",
+                    "path": "<Gamepad>/buttonNorth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Heavy Attack",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "2c230747-26c5-4c68-ad47-039a54c2182e",
                     "path": "<Keyboard>/leftShift",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Dash",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "66916293-44f2-46ef-9e31-236d56001f07",
+                    "path": "<Gamepad>/buttonEast",
                     "interactions": "",
                     "processors": "",
                     "groups": "",

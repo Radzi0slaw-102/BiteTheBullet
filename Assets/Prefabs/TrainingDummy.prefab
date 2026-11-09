@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4259181648740504438}
   - component: {fileID: 7875268895765515234}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Fill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -102,7 +102,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8371399240822186277}
   - component: {fileID: 8312351701410684740}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: HealthBar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -152,7 +152,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4701621298025455221}
   - component: {fileID: 2330619468514721640}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -245,7 +245,7 @@ GameObject:
   - component: {fileID: 5563617544734490449}
   - component: {fileID: 8088604704674050692}
   - component: {fileID: 4932653687664843917}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: BloodParticles
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2675,7 +2675,7 @@ GameObject:
   - component: {fileID: 817574551044998332}
   - component: {fileID: 2142733263868834328}
   - component: {fileID: 666091332890271654}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: TrainingDummy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2824,7 +2824,7 @@ GameObject:
   - component: {fileID: 433073080660825785}
   - component: {fileID: 8761979997910038795}
   - component: {fileID: 773546298175473906}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
